@@ -8,7 +8,7 @@ import { useAuthStore } from "@/store/store";
 import Image from "next/image";
 import {PlusSquareIcon} from "lucide-react"
 import { useRouter } from "next/navigation";
-
+import {ListChecks} from "lucide-react"
 // const RedirectToGithubCode = () => {
 //   window.location.href = "https://www.github.com/githeimer/trackr-next";
 // };
@@ -50,8 +50,8 @@ const Navbar:React.FC = () => {
       {/* right division */}
       <div className="flex flex-row gap-4 items-center align-center">
         {/* github redirect */}
+        <ListChecks className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" onClick={()=>router.push("/todo") }/>
         <PlusSquareIcon className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" onClick={()=>router.push("/dashboard") }></PlusSquareIcon>
-
         {user ? (
           <div className="relative" ref={dropdownRef}>
             <Image
