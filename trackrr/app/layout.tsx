@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from "sonner";
-import Navbar from "@/components/Navbar"
 import "./globals.css";
-
 
 
 export const metadata: Metadata = {
@@ -24,8 +20,6 @@ export default function RootLayout({
       <body
         className={` antialiased container bg-[#171717] text-[var(--light-color)]`}
       >
-        <Navbar></Navbar>
-        <Toaster/>
         {children}
       </body>
     </html>

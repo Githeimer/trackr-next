@@ -9,12 +9,15 @@ import Image from "next/image";
 import {PlusSquareIcon} from "lucide-react"
 import { useRouter } from "next/navigation";
 import {ListChecks} from "lucide-react"
+import { signOut, useSession } from "next-auth/react";
 // const RedirectToGithubCode = () => {
 //   window.location.href = "https://www.github.com/githeimer/trackr-next";
 // };
 
 const Navbar:React.FC = () => {
     const router= useRouter();
+
+  const {data:session}=useSession();
   const { user, logout } = useAuthStore() as AuthState;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -52,14 +55,14 @@ const Navbar:React.FC = () => {
         {/* github redirect */}
         <ListChecks className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" onClick={()=>router.push("/todo") }/>
         <PlusSquareIcon className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" onClick={()=>router.push("/dashboard") }></PlusSquareIcon>
-        {user ? (
+        {session ? (
           <div className="relative" ref={dropdownRef}>
             <Image
-              src="https://avatar.iran.liara.run/public"
+              src={session.user?.image as string}
               className="h-7 cursor-pointer rounded-full"
               width={30}
               height={30}
-              alt="User avatar"
+              alt={session.user?.name as string}
               onClick={toggleDropdown}
             />
             
@@ -75,6 +78,7 @@ const Navbar:React.FC = () => {
                 <button
                   onClick={() => {
                     logout();
+                    signOut();
                     setIsDropdownOpen(false);
                   }}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

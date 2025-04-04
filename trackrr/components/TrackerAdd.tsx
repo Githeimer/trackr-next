@@ -1,4 +1,5 @@
-import React, { useState, useMemo, useRef } from 'react';
+"use client"
+import React, { useState, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,9 @@ import axios from "axios";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
 import { Code, BookOpen, Music, Heart, Zap, CheckCircle, Leaf, BarChart } from 'lucide-react';
+import { useAuthStore } from '@/store/store';
+import { CategoryCreateData } from '@/helpers/db/category';
+import { useSession } from 'next-auth/react';
 
 const categories = [
     { name: "Coding", icon: Code },
@@ -32,52 +36,102 @@ const allIcons = [
 ];
 
 const AddCategoryDialog = () => {
-    const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
-  
+    const { user } = useAuthStore();
+    const {data:session} = useSession();
+    const [category, setCategory] = useState<string>("");
+    const [categoryType, setCategoryType] = useState<string>();
+    const [description, setDescription] = useState<string>("");
+    const [selectedIcon, setSelectedIcon] = useState<string | undefined>(undefined);
     const colorRef = useRef<HTMLInputElement>(null);
 
+    const [open, setopen] = useState(false);
+
+    const clearAllfields=()=>{
+        setCategory("");
+        setCategoryType("");
+        setDescription("")
+    }
+
     const handleAddCategory = async () => {
+        console.log(category, description, selectedIcon, categoryType)
+        if (!category || !description || !selectedIcon || !categoryType ) {
+            toast.error("Please fill all required fields.");
+            return;
+        }
+
         try {
-            const response = await axios.post("api/users/tracker", {});
-            if (response.data.ok) {
-                toast.success("Tracker added successfully, Try adding tasks");
+            const dataToServer: CategoryCreateData = {
+                u_id:session?.user.id as string  ,
+                category_name: category,
+                icon_name: selectedIcon,
+                category_type: categoryType,
+                description: description,
+                color: colorRef.current?.value || "#11ae70", // Default color if none selected
+            };
+
+
+            const response = await axios.post("/api/category", dataToServer);
+
+            console.log(response);
+
+            if (response.status==201) {
+                setopen(false);
+                clearAllfields();
+                window.location.reload();
+                toast.success("Category added successfully! Try adding tasks.");
+            } else {
+                toast.error("Failed to add category. Please try again.");
             }
         } catch (error) {
-            toast.error("Error occurred while Adding a Tracker!");
+            toast.error("Error occurred while adding the category.");
         }
     };
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setopen}>
             <DialogTrigger asChild>
-                <Button className="hover:opacity-90 bg-green-500">
-                    + Add Category
-                </Button>
+                <Button className="hover:opacity-90 bg-green-500">+ Add Category</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-lg bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-xl text-white">
+            <DialogContent className="w-[90%] max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl max-h-[90vh] md:max-h-[100vh] overflow-y-auto  
+    bg-black/70 md:bg-black/30 sm:bg-black border border-white/10 rounded-xl shadow-xl text-white  
+    ">
+
                 <DialogHeader>
                     <DialogTitle className="text-xl font-bold">Add Category</DialogTitle>
                 </DialogHeader>
-                
+
                 <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
                         <Label>Tracker Name</Label>
-                        <Input id="name" placeholder="Enter tracker name" className="bg-white/10 border-white/20 text-white" />
+                        <Input
+                            id="name"
+                            placeholder="Enter tracker name"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="bg-white/10 border-white/20 text-white"
+                            required
+                        />
                     </div>
 
                     <div className="grid gap-2">
                         <Label>Description</Label>
-                        <Textarea id="description" placeholder="Enter description" className="bg-white/10 border-white/20 text-white" />
+                        <Textarea
+                            id="description"
+                            placeholder="Enter description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            className="bg-white/10 border-white/20 text-white"
+                            required
+                        />
                     </div>
 
                     <div className="grid gap-2">
                         <Label>Icon</Label>
-                      
                         <div className="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto pr-2">
-                            {allIcons.map(iconItem => {
+                            {allIcons.map((iconItem) => {
                                 const IconComponent = iconItem.icon;
                                 return (
-                                    <div 
+                                    <div
                                         key={iconItem.name}
                                         onClick={() => setSelectedIcon(iconItem.name)}
                                         className={`flex flex-col items-center justify-center p-2 rounded-lg cursor-pointer transition-all ${
@@ -89,31 +143,32 @@ const AddCategoryDialog = () => {
                                     </div>
                                 );
                             })}
-                          
                         </div>
                     </div>
 
                     <div className="grid gap-2">
                         <Label>Icon Color</Label>
-                        <div className="flex items-center space-x-3">
-                       
-                            <input 
-                                type="color" 
-                                defaultValue={"#11ae70"}
-                                ref={colorRef}
-                                className="w-full h-10 cursor-pointer bg-transparent border-white/20"
-                            />
-                        </div>
+                        <input
+                            type="color"
+                            defaultValue="#11ae70"
+                            ref={colorRef}
+                            className="w-full h-10 cursor-pointer bg-transparent border-white/20"
+                        />
                     </div>
 
                     <div className="grid gap-2">
                         <Label>Category</Label>
-                        <RadioGroup defaultValue="coding" className="grid grid-cols-2 gap-2 ">
-                            {categories.map(cat => {
+                        <RadioGroup
+                          
+                            className="grid grid-cols-2 gap-2"
+                            value={categoryType}
+                            onValueChange={(value)=>{setCategoryType(value)}}
+                        >
+                            {categories.map((cat) => {
                                 const IconComponent = cat.icon;
                                 return (
                                     <div key={cat.name} className="flex items-center space-x-2">
-                                        <RadioGroupItem className='bg-white text-green-500 accent-green-500 peer-checked:bg-green-500 ' value={cat.name.toLowerCase()} id={cat.name.toLowerCase()} />
+                                        <RadioGroupItem className="bg-white text-green-500 accent-green-500 peer-checked:bg-green-500" value={cat.name.toLowerCase()} id={cat.name.toLowerCase()} />
                                         <Label htmlFor={cat.name.toLowerCase()} className="flex items-center cursor-pointer">
                                             <IconComponent className="h-4 w-4 mr-2" />
                                             {cat.name}
@@ -126,9 +181,11 @@ const AddCategoryDialog = () => {
                 </div>
 
                 <DialogFooter>
-                    <Button type="button" variant="outline" className="bg-transparent border-white/20 text-white hover:bg-white/10">
-                        Cancel
-                    </Button>
+                    <DialogTrigger>
+                    
+                    Cancel
+                
+                    </DialogTrigger>
                     <Button onClick={handleAddCategory} className="bg-green-500 hover:opacity-90">
                         Add Category
                     </Button>

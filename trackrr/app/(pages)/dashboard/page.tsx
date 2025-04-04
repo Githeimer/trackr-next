@@ -6,10 +6,12 @@ import React from 'react'
 
 
 const Dashboard:React.FC = () => {
+  
+
     const {user,logout}=useAuthStore() as AuthState;
     
   return (
-    <div className='ml-6 mt-8'>
+    <div className='ml-6 mt-8 flex-row'>
       <div className='flex flex-row justify-between'>
       <div className='opening-text flex flex-col items-start justify-center gap-2'>
             <div className='text-3xl font-[600]'>
@@ -21,6 +23,7 @@ const Dashboard:React.FC = () => {
         </div>
         <div>
            <AddCategoryDialog></AddCategoryDialog>
+           
         </div>
       </div>
     </div>

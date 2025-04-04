@@ -13,10 +13,10 @@ export interface Category {
 
   export interface CategoryCreateData {
     // c_id and created_at are not needed for creation cause they are auto-generated
-    u_id: string; // meed tp i[date]
+    u_id: string | undefined; 
     category_name: string;
-    category_type: string;
-    icon_name?: string;
+    category_type: string |null;
+    icon_name?: string |null;
     color?: string;
     description?: string;
     // Add any other fields need for category creation

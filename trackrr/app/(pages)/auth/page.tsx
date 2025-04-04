@@ -1,13 +1,28 @@
 "use client"
-import React from "react";
+import { useAuthStore } from "@/store/store";
+import {signIn, useSession} from "next-auth/react"
+import { useRouter} from "next/navigation";
+import { useEffect } from "react";
 
 const Login = () => {
-//   const Backend_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL; //in vite + react .env file is stored in a specific syntax and to access it is a different way than backend
-  // const newURL = `${Backend_URL}/auth/google`; //used for debug purpose
+  const {user,setUser}= useAuthStore();
+  const {data:session, status}=useSession();
+  const router = useRouter();
 
-  const handleGoogleLogin = () => {
-    // window.location.href = Backend_URL + "/auth/google";
-    //oauth backend url
+  useEffect(()=>{
+      if(session?.user)
+      {
+          setUser({
+            id: session.user?.id as string,
+            username: session.user?.name as string,
+            email: session.user?.email as string,
+            image: session.user?.image as string,
+          })
+      }
+  },[session,router,setUser])
+
+  const handleGoogleLogin = async() => {
+    await signIn("google");
   };
   return (
     <div>
@@ -21,7 +36,7 @@ const Login = () => {
           </h1>
           <hr className="border-[var(--text-color)] w-[60%] self-center p-1 " />
           <button
-            className=" p-2 border-[1px] border-[var(--brand-color)] hover:bg-zinc-800 "
+            className=" p-2 border-[1px] border-[var(--brand-color)] hover:bg-zinc-800 cursor-pointer "
             onClick={handleGoogleLogin}
           >
             {/* google login */}
@@ -30,15 +45,14 @@ const Login = () => {
               <p className="text-base">Google</p>
             </div>
           </button>
-          <p className="text-center text-[var(--brand-color)]">Coming soon</p>
           {/* github login */}
-          <button className="p-2 border-[1px] border-[var(--brand-color)] bg-zinc-900 ">
+          <button className="p-2 border-[1px] border-[var(--brand-color)] bg-zinc-900 cursor-not-allowed">
             <div className="flex flex-row gap-5 justify-center items-center">
               <img src="./github_white.png" className="h-5" alt="" />
               <p className="text-base">Github</p>
             </div>
           </button>
-          <button className="p-2 border-[1px] border-[var(--brand-color)] bg-zinc-900 ">
+          <button className="p-2 border-[1px] border-[var(--brand-color)] bg-zinc-900 cursor-not-allowed ">
             <div className="flex flex-row gap-5 justify-center items-center">
               <img src="./X.png" className="h-5" alt="" />
               <p className="text-base">Twitter</p>
