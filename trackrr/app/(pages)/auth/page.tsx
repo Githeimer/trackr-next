@@ -9,17 +9,17 @@ const Login = () => {
   const {data:session, status}=useSession();
   const router = useRouter();
 
-  useEffect(()=>{
-      if(session?.user)
-      {
-          setUser({
-            id: session.user?.id as string,
-            username: session.user?.name as string,
-            email: session.user?.email as string,
-            image: session.user?.image as string,
-          })
-      }
-  },[session,router,setUser])
+  useEffect(() => {
+    if (session?.user) {
+      setUser({
+        id: session.user?.id as string,
+        username: session.user?.name as string,
+        email: session.user?.email as string,
+        image: session.user?.image as string,
+      });
+    }
+  }, [session, router, setUser]);
+  
 
   const handleGoogleLogin = async() => {
     await signIn("google");

@@ -10,9 +10,6 @@ import {PlusSquareIcon} from "lucide-react"
 import { useRouter } from "next/navigation";
 import {ListChecks} from "lucide-react"
 import { signOut, useSession } from "next-auth/react";
-// const RedirectToGithubCode = () => {
-//   window.location.href = "https://www.github.com/githeimer/trackr-next";
-// };
 
 const Navbar:React.FC = () => {
     const router= useRouter();
@@ -40,7 +37,8 @@ const Navbar:React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-row items-center justify-between mt-3 p-2 rounded-xl bg-[var(--nav-color)]">
+    <div className=" container sticky z-50">
+      <div className="flex flex-row items-center justify-between mt-3 p-2 rounded-xl bg-[var(--nav-color)]">
       {/* left division */}
       <Link href={"/"}>
       <div className="flex flex-row gap-3 items-center align-center">
@@ -95,6 +93,7 @@ const Navbar:React.FC = () => {
           </Link>
         )}
       </div>
+    </div>
     </div>
   );
 };

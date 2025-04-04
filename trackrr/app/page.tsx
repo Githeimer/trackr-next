@@ -1,4 +1,5 @@
 "use client"
+import LandingPage from '@/components/Landing'
 import Navbar from '@/components/Navbar'
 import { SessionProvider } from 'next-auth/react'
 import React from 'react'
@@ -8,8 +9,8 @@ const Home = (props: Props) => {
   return (
    <>
    <SessionProvider>
-   <Navbar></Navbar>
-  LandingPAge
+  
+   <LandingPage></LandingPage>
    </SessionProvider>
    
    </>

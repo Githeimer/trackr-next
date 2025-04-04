@@ -5,10 +5,9 @@ import { AuthState, useAuthStore } from '@/store/store'
 import React from 'react'
 
 
-const Dashboard:React.FC = () => {
-  
-
+const Dashboard = () => {
     const {user,logout}=useAuthStore() as AuthState;
+    
     
   return (
     <div className='ml-6 mt-8 flex-row'>

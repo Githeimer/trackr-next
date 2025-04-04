@@ -12,7 +12,7 @@
 
 # testing
 /coverage
-
+random.txt
 # next.js
 /.next/
 /out/

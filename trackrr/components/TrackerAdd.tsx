@@ -13,7 +13,7 @@ import { useAuthStore } from '@/store/store';
 import { CategoryCreateData } from '@/helpers/db/category';
 import { useSession } from 'next-auth/react';
 
-const categories = [
+export const categories = [
     { name: "Coding", icon: Code },
     { name: "Study", icon: BookOpen },
     { name: "Music", icon: Music },
@@ -24,7 +24,7 @@ const categories = [
     { name: "Workout", icon: BarChart }
 ];
 
-const allIcons = [
+export const allIcons = [
     { name: "Code", icon: Code },
     { name: "BookOpen", icon: BookOpen },
     { name: "Music", icon: Music },
