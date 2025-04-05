@@ -22,11 +22,9 @@ export async function GET(request: NextRequest) {
     }
 }
 
-//Create category (api)
 export async function POST(request: NextRequest) {
     try {
       const body: CategoryCreateData = await request.json();
-      console.log(body)
       const newCategory = await createCategory(body);
       return NextResponse.json(newCategory, { status: 201 });
     } catch (error: any) {

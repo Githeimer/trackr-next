@@ -65,7 +65,7 @@ const Todo = () => {
                 {/* Todo Cards */}
                 <div className='flex flex-col pl-2'>
                 {categoryData.map((data,index)=>{
-                  return <TodoCategory key={index} props={data}></TodoCategory>
+                  return <TodoCategory key={index} category={data}></TodoCategory>
                 })}
                 </div>
              </div>
