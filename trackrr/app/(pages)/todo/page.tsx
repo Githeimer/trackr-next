@@ -10,15 +10,16 @@ export interface Category{
   category_name: string
   category_type: string
   color: string
-  created_at:string
+  created_at: string
   description: string
-  icon_name : string
-  u_id:string
+  icon_name: string
+  u_id: string
 }
 
 const Todo = () => {
-  const{data:session,status}=useSession();
-  const [categoryData,setCategoryData]=useState([]);
+  const { data: session, status } = useSession();
+  const [categoryData, setCategoryData] = useState([]);
+  const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     if (status === "authenticated" && session?.user?.id) {
@@ -26,52 +27,48 @@ const Todo = () => {
     }
   }, [status, session]);
   
-
-  const getCategory=async()=>{
+  const getCategory = async() => {
     try {
-      const response=await axios.get(`/api/category?u_id=${session?.user.id}`);
+      const response = await axios.get(`/api/category?u_id=${session?.user.id}`);
       
-      if(response.data)
-      {
+      if(response.data) {
         setCategoryData(response.data)
       }
-      console.log(response);
-
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br p-6 flex flex-col items-center">
+    <div className="min-h-screen  p-6 flex flex-col items-center">
       <div className="w-full max-w-4xl">
-
         <div className="mb-8 text-center">
-          <h1 className="md:text-4xl text-2xl font-bold text-white mb-2">
+          <h1 className="md:text-4xl text-2xl font-bold text-[#16ae50] mb-2">
             {session?.user?.name}'s Tasks
           </h1>
-          <p className="text-[#a9d8be] md:text-lg text-sm">Organize your day with style</p>
+          <p className="text-[#6b716e] md:text-lg text-sm">Organize your day with style</p>
         </div>
    
-        <div className="w-full backdrop-blur-lg bg-white/10 rounded-2xl shadow-2xl overflow-hidden border border-white/20">
-          <div className="flex overflow-x-auto p-4 gap-2 border-b border-white/10">
-           
-             <div className='flex flex-col w-full gap-4'>
-               {/* Heading part */}
-                <div className='flex flex-row justify-between'>
-                  <h1 className='md:text-2xl text-md font-semibold'>To-do-List</h1>
-                  <Clock/>
+        <div className="w-full backdrop-blur-md bg-white/5 rounded-2xl shadow-lg overflow-hidden">
+          <div className="p-6">
+            <div className="flex flex-col w-full gap-4">
+              {/* Heading part */}
+              <div className="flex flex-row justify-between items-center mb-4 border-b border-[#707070]/20 pb-4">
+                <h1 className="md:text-2xl text-md font-semibold text-white">To-do-List</h1>
+                <div className="flex flex-row items-center gap-2 text-[#16ae50]">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-sm">{today}</span>
                 </div>
-                {/* Todo Cards */}
-                <div className='flex flex-col pl-2'>
-                {categoryData.map((data,index)=>{
-                  return <TodoCategory key={index} category={data}></TodoCategory>
-                })}
-                </div>
-             </div>
-             
-             
-           </div>
+              </div>
+              
+              {/* Todo Cards */}
+              <div className="flex flex-col gap-5">
+                {categoryData.map((data, index) => (
+                  <TodoCategory key={index} category={data} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

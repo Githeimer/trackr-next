@@ -13,9 +13,7 @@ const nextConfig: import('next').NextConfig = {
   },
   
   // For Next.js 15.2.4
-  experimental: {
-    serverComponentsExternalPackages: ['tailwindcss']
-  }
+  serverExternalPackages:['tailwind']
 };
 
 module.exports = nextConfig;

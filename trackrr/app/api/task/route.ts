@@ -18,8 +18,9 @@ export async function GET(req: NextRequest) {
     try {
       const { searchParams } = new URL(req.url);
       const categoryId = searchParams.get("cid");
+      const today=searchParams.get("date");
   
-      const { data, error } = await supabase.from("task").select("*").eq("c_id", categoryId);
+      const { data, error } = await supabase.from("task").select("*").eq("c_id", categoryId).eq("date",today);
   
 
       if (error) {
@@ -63,25 +64,97 @@ export async function POST(request:NextRequest){
     }
   }
 
-export async function DELETE(request:NextRequest){
+  export async function DELETE(request: NextRequest) {
     try {
-      const {searchParams}= new URL(request.url);
-      const task_id= searchParams.get("t_id");
-
-      if(!task_id)
-      {
+      const { searchParams } = new URL(request.url);
+      const task_id = searchParams.get("t_id");
+  
+      if (!task_id) {
         throw "Task Id not found";
       }
-
-      const {data:DBresponse,error:DBerror}=await supabase.from("task").delete().eq("t_id",task_id).select();
-
-      if(DBerror)
-      {
+  
+      // First, get the task details to check its status and get c_id and date
+      const { data: taskData, error: taskError } = await supabase
+        .from("task")
+        .select("*")
+        .eq("t_id", task_id)
+        .single();
+  
+      if (taskError) {
+        throw taskError;
+      }
+  
+      if (!taskData) {
+        throw "Task not found";
+      }
+  
+      // Store task details before deletion
+      const { status, c_id, u_id, date } = taskData;
+  
+      // Delete the task
+      const { data: DBresponse, error: DBerror } = await supabase
+        .from("task")
+        .delete()
+        .eq("t_id", task_id)
+        .select();
+  
+      if (DBerror) {
         throw DBerror;
       }
-
-      return NextResponse.json({message:"Task removed"},{status:200});
-
+  
+      // If the task status was true, decrease intensity in cell_data
+      let cellDataResponse = null;
+      if (status === true) {
+        // Fetch the cell_data record
+        const { data: cellData, error: cellError } = await supabase
+          .from("cell_data")
+          .select("*")
+          .eq("c_id", c_id)
+          .eq("date", date);
+  
+        if (cellError) {
+          throw cellError;
+        }
+  
+        if (cellData && cellData.length > 0) {
+          const currentIntensity = cellData[0].intensity;
+  
+          if (currentIntensity <= 1) {
+            // If intensity is 1 or 0, delete the record
+            const { data: deletedData, error: deleteError } = await supabase
+              .from("cell_data")
+              .delete()
+              .eq("c_id", c_id)
+              .eq("date", date);
+  
+            if (deleteError) {
+              throw deleteError;
+            }
+            cellDataResponse = { message: "Cell data record deleted" };
+          } else {
+            // Decrease intensity by 1
+            const newIntensity = currentIntensity - 1;
+            const { data: updatedData, error: updateError } = await supabase
+              .from("cell_data")
+              .update({ intensity: newIntensity })
+              .eq("c_id", c_id)
+              .eq("date", date)
+              .select();
+  
+            if (updateError) {
+              throw updateError;
+            }
+            cellDataResponse = updatedData;
+          }
+        }
+      }
+  
+      return NextResponse.json({
+        message: "Task removed",
+        cellDataUpdated: status === true,
+        cellDataResponse
+      }, { status: 200 });
+  
     } catch (error) {
       console.error("Error deleting task:", error);
       return NextResponse.json(
