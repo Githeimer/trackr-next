@@ -12,8 +12,10 @@ const nextConfig: import('next').NextConfig = {
     ignoreDuringBuilds: true,
   },
   
-    serverComponentsExternalPackages:['tailwindcss']
- 
+  // For Next.js 15.2.4
+  experimental: {
+    serverComponentsExternalPackages: ['tailwindcss']
+  }
 };
 
 module.exports = nextConfig;
