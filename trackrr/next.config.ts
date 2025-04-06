@@ -11,9 +11,9 @@ const nextConfig: import('next').NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental:{
+  
     serverComponentsExternalPackages:['tailwindcss']
-  }
+ 
 };
 
 module.exports = nextConfig;

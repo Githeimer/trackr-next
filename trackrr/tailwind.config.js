@@ -1,8 +1,13 @@
+/** @type {import('tailwindcss').Config} */
 export const future = {
   oxide: false, // Disable the oxide compiler
 };
 export const content = [
-  "./pages/**/*.{js,jsx,ts,tsx}",
-  "./components/**/*.{js,jsx,ts,tsx}",
-  "./app/**/*.{js,jsx,ts,tsx}",
+  "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+  "./components/**/*.{js,ts,jsx,tsx,mdx}",
 ];
+export const theme = {
+  extend: {},
+};
+export const plugins = [];
