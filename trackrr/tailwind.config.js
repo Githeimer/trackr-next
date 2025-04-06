@@ -1,8 +1,8 @@
-export const content = [
-  "./pages/**/*.{js,ts,jsx,tsx}",
-  "./components/**/*.{js,ts,jsx,tsx}",
-];
-export const theme = {
-  extend: {},
+export const future = {
+  oxide: false, // Disable the oxide compiler
 };
-export const plugins = [];
+export const content = [
+  "./pages/**/*.{js,jsx,ts,tsx}",
+  "./components/**/*.{js,jsx,ts,tsx}",
+  "./app/**/*.{js,jsx,ts,tsx}",
+];
