@@ -7,11 +7,11 @@ import ContributionBox from './ContributionBox'
 const Contribution = ({category}:{category:Category}) => {
   const {c_id,u_id}=category;
   return (
-    <div className="flex-col gap-3  p-3 bg-[#171717] rounded-md" draggable>
+    <div className="md:w-[90%] w-[100%] flex-col gap-3  p-3 bg-[#171717] rounded-md" draggable>
       {/* Top section */}
       <div className='flex flex-row justify-between items-center'>
         <div className='flex flex-row gap-3 items-center' >
-        <span className='text-2xl'>{category.category_name}</span>
+        <span className='md:text-2xl text-lg' >{category.category_name}</span>
         <div className='rounded-full w-2.5 h-2.5' style={{backgroundColor:category.color}}></div>
         </div>
         
@@ -24,7 +24,7 @@ const Contribution = ({category}:{category:Category}) => {
         />
       </div>
       {/* Category */}
-      <ContributionBox categoryId={Number(c_id)} userId={Number(u_id)}></ContributionBox>
+      <ContributionBox categoryId={Number(c_id)} userId={Number(u_id)} color={category.color}></ContributionBox>
     </div>
   )
 }

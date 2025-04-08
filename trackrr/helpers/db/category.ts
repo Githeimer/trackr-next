@@ -6,7 +6,7 @@ export interface Category {
     category_name: string;
     category_type: string;
     icon_name?: string;
-    color?: string;
+    color: string;
     description?: string;
     created_at?: string;
   }

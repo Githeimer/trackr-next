@@ -18,6 +18,8 @@ export async function PATCH(request: NextRequest) {
         }
 
         const { t_id, c_id: Celldata_c_id, u_id, date: Taskdate } = DBresponse[0];
+        // Format both dates to YYYY-MM-DD to remove time component
+        const normalizedDate = new Date(Taskdate).toISOString().split('T')[0];
         const taskStatus = DBresponse[0].status;
 
         // If taskStatus is true, we need to create data or increment intensity 
@@ -26,7 +28,7 @@ export async function PATCH(request: NextRequest) {
                 .from("cell_data")
                 .select("*")
                 .eq("c_id", Celldata_c_id)
-                .eq("date", Taskdate);
+                .eq("date", normalizedDate);
 
             if (CellError) {
                 throw CellError;
@@ -34,8 +36,6 @@ export async function PATCH(request: NextRequest) {
 
             // Check if the array has data
             if (CellData && CellData.length > 0) {
-                console.log("Data bhetyo ta increment garau aba");
-                
                 // Increment intensity logic
                 const currentIntensity = CellData[0].intensity;
                 const newIntensity = currentIntensity + 1;
@@ -44,7 +44,7 @@ export async function PATCH(request: NextRequest) {
                     .from("cell_data")
                     .update([{ "intensity": newIntensity }])
                     .eq("c_id", Celldata_c_id)
-                    .eq("date", Taskdate)
+                    .eq("date", normalizedDate)
                     .select();
                     
                 if (updateError) {
@@ -57,7 +57,6 @@ export async function PATCH(request: NextRequest) {
                 }, { status: 200 });
                 
             } else {
-                console.log("Data bhetena banaunau paryo");
                 const intensity = 1;
                 const { data: CellCreateData, error: CellCreateError } = await supabase
                     .from("cell_data")
@@ -65,7 +64,7 @@ export async function PATCH(request: NextRequest) {
                         "c_id": Celldata_c_id, 
                         "u_id": u_id, 
                         "intensity": intensity, 
-                        "date": Taskdate 
+                        "date": normalizedDate
                     }])
                     .select();
 
@@ -73,7 +72,6 @@ export async function PATCH(request: NextRequest) {
                     throw CellCreateError;
                 }
 
-                console.log("Data banyo");
                 return NextResponse.json({ 
                     taskStatus: DBresponse, 
                     CellData: CellCreateData 
@@ -81,13 +79,12 @@ export async function PATCH(request: NextRequest) {
             }
         } else {
             // Handle the case when taskStatus is false
-            console.log("Decrement garnu parxa");
             
             const { data: CellData, error: CellError } = await supabase
                 .from("cell_data")
                 .select("*")
                 .eq("c_id", Celldata_c_id)
-                .eq("date", Taskdate);
+                .eq("date", normalizedDate);
                 
             if (CellError) {
                 throw CellError;
@@ -102,7 +99,7 @@ export async function PATCH(request: NextRequest) {
                         .from("cell_data")
                         .delete()
                         .eq("c_id", Celldata_c_id)
-                        .eq("date", Taskdate);
+                        .eq("date", normalizedDate);
                         
                     if (deleteError) {
                         throw deleteError;
@@ -120,7 +117,7 @@ export async function PATCH(request: NextRequest) {
                         .from("cell_data")
                         .update([{ "intensity": newIntensity }])
                         .eq("c_id", Celldata_c_id)
-                        .eq("date", Taskdate)
+                        .eq("date", normalizedDate)
                         .select();
                         
                     if (updateError) {

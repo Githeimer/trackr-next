@@ -28,8 +28,6 @@ export async function GET(params: NextRequest) {
         userId: Number(userId),
       };
   
-      console.log("Date range:", { oneYearAgo: data.oneYearAgo, today: data.today });
-  
       const { data: CellData, error: CellError } = await supabase
         .from("cell_data")
         .select("*")
@@ -42,8 +40,6 @@ export async function GET(params: NextRequest) {
         console.error(CellError);
         return NextResponse.json({ message: "Failed to fetch cell data" }, { status: 500 });
       }
-  
-      console.log(`Found ${CellData.length} records`);
   
       return NextResponse.json({ 
         message: "API HIT SUCCESS", 

@@ -21,7 +21,13 @@ const TodoCategory = ({ category }: { category: Category }) => {
 
   const fetchTaskData = async () => {
     try {
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date().toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      
+      console.log(today);
       const response = await axios.get(`/api/task?cid=${category.c_id}&date=${today}`);
       if (response.data.tasks) {
         setTasks(response.data.tasks);

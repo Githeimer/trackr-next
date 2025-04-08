@@ -19,7 +19,11 @@ export interface Category{
 const Todo = () => {
   const { data: session, status } = useSession();
   const [categoryData, setCategoryData] = useState([]);
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
 
   useEffect(() => {
     if (status === "authenticated" && session?.user?.id) {

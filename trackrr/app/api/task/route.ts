@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
       const { searchParams } = new URL(req.url);
       const categoryId = searchParams.get("cid");
       const today=searchParams.get("date");
+      console.log(today);
   
       const { data, error } = await supabase.from("task").select("*").eq("c_id", categoryId).eq("date",today);
   
