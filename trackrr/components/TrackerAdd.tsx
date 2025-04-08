@@ -90,11 +90,10 @@ const AddCategoryDialog = () => {
     return (
         <Dialog open={open} onOpenChange={setopen}>
             <DialogTrigger asChild>
-                <Button className="hover:opacity-90 bg-green-500">+ Add Category</Button>
+                <Button className="bg-green-500 hover:bg-green-600 cursor-pointer" >+ Add Category</Button>
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl max-h-[90vh] md:max-h-[100vh] overflow-y-auto  
-    bg-black/70 md:bg-black/30 sm:bg-black border border-white/10 rounded-xl shadow-xl text-white  
-    ">
+    bg-black/70 md:bg-black/30 sm:bg-black border border-white/10 rounded-xl shadow-xl text-white">
 
                 <DialogHeader>
                     <DialogTitle className="text-xl font-bold">Add Category</DialogTitle>
@@ -102,10 +101,10 @@ const AddCategoryDialog = () => {
 
                 <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
-                        <Label>Tracker Name</Label>
+                        <Label>Habit Name</Label>
                         <Input
                             id="name"
-                            placeholder="Enter tracker name"
+                            placeholder="Enter Habit name"
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                             className="bg-white/10 border-white/20 text-white"
