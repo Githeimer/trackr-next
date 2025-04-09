@@ -94,26 +94,29 @@ export default function LandingPage() {
               <p className="text-[#707070] text-lg md:text-xl max-w-lg">
                 Track your daily progress, analyze patterns, and achieve your goals with our AI-powered habit tracking system.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4" >
+              <Link href={"/auth"} >
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-[#16ae50] to-[#0e8e40] text-white py-3 px-8 rounded-lg font-medium flex items-center gap-2"
+                  className="bg-gradient-to-r cursor-pointer from-[#16ae50] to-[#0e8e40] text-white py-3 px-8 rounded-lg font-medium flex items-center gap-2"
                 >
-                 <Link href={"/auth"}>
-                 Get Started</Link>
+                
+                 Get Started
                  
                 <ArrowRight size={18} />
                 </motion.button>
-               
+                </Link>
+                <Link href={"https://github.com/githeimer/trackr-next"} target="_blank" >
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="border border-[#16ae50] text-[#16ae50] py-3 px-8 rounded-lg font-medium hover:bg-[#16ae50]/10 transition-colors"
+                    className="border cursor-pointer border-[#16ae50] text-[#16ae50] py-3 px-8 rounded-lg font-medium hover:bg-[#16ae50]/10 transition-colors "
                   >
-                   <Link href={"https://github.com/githeimer/trackr-next"} target="_blank" >
-                   Github Code</Link>
+                 
+                   Github Code
                   </motion.button>
+                  </Link>
               
               </div>
             </motion.div>
@@ -404,22 +407,28 @@ export default function LandingPage() {
               Join thousands of users who are taking control of their daily routines and improving their productivity.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-[#16ae50] to-[#0e8e40] text-white py-3 px-8 rounded-lg font-medium flex items-center gap-2"
-              >
-                 <Link href={"/auth"}>
-                 Get Started</Link><ArrowRight size={18} />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-[#0e0e0e] border border-[#707070] text-white py-3 px-8 rounded-lg font-medium hover:bg-[#707070]/10 transition-colors"
-              >
-               <Link href={"https://github.com/githeimer/trackr-next"} target="_blank" >
-               Github Code</Link>
-              </motion.button>
+            <Link href={"/auth"} >
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-gradient-to-r cursor-pointer from-[#16ae50] to-[#0e8e40] text-white py-3 px-8 rounded-lg font-medium flex items-center gap-2"
+                >
+                
+                 Get Started
+                 
+                <ArrowRight size={18} />
+                </motion.button>
+                </Link>
+                <Link href={"https://github.com/githeimer/trackr-next"} target="_blank" >
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="border cursor-pointer border-[#16ae50] text-[#16ae50] py-3 px-8 rounded-lg font-medium hover:bg-[#16ae50]/10 transition-colors "
+                  >
+                 
+                   Github Code
+                  </motion.button>
+                  </Link>
             </div>
           </motion.div>
         </div>

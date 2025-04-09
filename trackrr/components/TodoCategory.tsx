@@ -21,14 +21,12 @@ const TodoCategory = ({ category }: { category: Category }) => {
 
   const fetchTaskData = async () => {
     try {
-      const today = new Date().toLocaleDateString('en-GB', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
+      const today = new Date();
+      const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      console.log(formattedDate);
       
-      console.log(today);
-      const response = await axios.get(`/api/task?cid=${category.c_id}&date=${today}`);
+      const response = await axios.get(`/api/task?cid=${category.c_id}&date=${formattedDate}`);
+
       if (response.data.tasks) {
         setTasks(response.data.tasks);
       }

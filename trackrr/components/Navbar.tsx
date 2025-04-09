@@ -50,9 +50,13 @@ const Navbar:React.FC = () => {
       </Link>
       {/* right division */}
       <div className="flex flex-row gap-4 items-center align-center">
-        {/* github redirect */}
-        <ListChecks className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" onClick={()=>router.push("/todo") }/>
-        <PlusSquareIcon className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" onClick={()=>router.push("/dashboard") }></PlusSquareIcon>
+
+      
+        <Link href={"/dashboard"} ><PlusSquareIcon className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300" ></PlusSquareIcon>
+        </Link>
+        <Link href={"/todo"}>
+        <ListChecks className="text-[var(--text-color)] cursor-pointer hover:bg-gray-800  hover:ease-in-out hover:duration-300"/>
+        </Link>        
         {session ? (
           <div className="relative" ref={dropdownRef}>
             <Image

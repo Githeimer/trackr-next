@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     
   return (
-    <div className='ml-6 mt-8 flex-row'>
+    <div className=' mt-8 flex-col'>
       {/* Top section */}
       <div className='flex flex-row justify-between'>
       <div className='opening-text flex flex-col items-start justify-center gap-2'>
@@ -46,11 +46,11 @@ const Dashboard = () => {
         </div>
        
       </div>
-      <div className='text-sm font-medium text-[var(--brand-color)] p-2'>
+      <div className='text-sm font-medium text-[var(--brand-color)] py-2'>
                 Track your activities across different categories and build up your activity history.
             </div>
       {/* Tracker Section */}
-      <div className='flex flex-col gap-3 justify-center items-center '>
+      <div className='flex flex-col gap-3 justify-center items-center mt-4'>
         {CategoryData.map((ele,index)=>{
           return <Contribution key={index} category={ele}></Contribution> 
         })}

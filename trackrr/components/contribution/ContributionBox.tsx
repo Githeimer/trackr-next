@@ -108,7 +108,7 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
 
   // Function to determine cell color based on intensity
   const getCellColor = (intensity: number) => {
-    if (intensity === 0) return '#272626';
+    if (intensity === 0) return hexToRgba(color,0.08);
     
     // Extract the base color and create darker variants
     let baseColor = color;
@@ -122,7 +122,7 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
     const b = parseInt(baseColor.substring(4, 6), 16);
     
     // Adjust brightness based on intensity (1-4)
-    const brightnessMultiplier = 0.4 + (intensity * 0.15);
+    const brightnessMultiplier = 0.65 + (intensity * 0.15);
     
     // Ensure we don't go over 255
     const newR = Math.min(255, Math.floor(r * brightnessMultiplier));
@@ -173,7 +173,7 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
         <>
           {/* Contribution grid */}
           <div className="flex overflow-x-auto justify-center p-2">
-                        <div className='flex flex-col text-sm pr-2'>
+                        <div className='flex flex-col text-sm pr-2 text-gray-600'>
                 {weekDays.map((ele, index) => {
                   return (
                     <span key={index}>
@@ -221,5 +221,29 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
     </div>
   );
 };
+
+function hexToRgba(hex: string, alpha: number) {
+  let r = 0, g = 0, b = 0;
+
+  // Remove '#' if present
+  if (hex[0] === "#") {
+    hex = hex.slice(1);
+  }
+
+  if (hex.length === 3) {
+    // Handle short form like #abc
+    r = parseInt(hex[0] + hex[0], 16);
+    g = parseInt(hex[1] + hex[1], 16);
+    b = parseInt(hex[2] + hex[2], 16);
+  } else if (hex.length === 6) {
+    r = parseInt(hex.slice(0, 2), 16);
+    g = parseInt(hex.slice(2, 4), 16);
+    b = parseInt(hex.slice(4, 6), 16);
+  }
+
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+
 
 export default ContributionBox;

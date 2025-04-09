@@ -19,12 +19,9 @@ export interface Category{
 const Todo = () => {
   const { data: session, status } = useSession();
   const [categoryData, setCategoryData] = useState([]);
-  const today = new Date().toLocaleDateString('en-GB', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  });
 
+  const today = new Date();
+      const normalizedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   useEffect(() => {
     if (status === "authenticated" && session?.user?.id) {
       getCategory();
@@ -61,7 +58,7 @@ const Todo = () => {
                 <h1 className="md:text-2xl text-md font-semibold text-white">To-do-List</h1>
                 <div className="flex flex-row items-center gap-2 text-[#16ae50]">
                   <Clock className="w-4 h-4" />
-                  <span className="text-sm">{today}</span>
+                  <span className="text-sm">{normalizedDate}</span>
                 </div>
               </div>
               
