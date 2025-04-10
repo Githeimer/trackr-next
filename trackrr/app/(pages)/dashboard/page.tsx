@@ -47,7 +47,7 @@ const Dashboard = () => {
        
       </div>
       <div className='text-sm font-medium text-[var(--brand-color)] py-2'>
-                Track your activities across different categories and build up your activity history.
+                Complete Daily Tasks across different categories and build up your activity history.
             </div>
       {/* Tracker Section */}
       <div className='flex flex-col gap-3 justify-center items-center mt-4'>

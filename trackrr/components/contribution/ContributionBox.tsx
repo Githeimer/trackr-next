@@ -176,9 +176,9 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
                         <div className='flex flex-col text-sm pr-2 text-gray-600'>
                 {weekDays.map((ele, index) => {
                   return (
-                    <span key={index}>
+                    <span key={index} className='h-4'>
                       {ele === "Sun" || ele === "Tue" || ele === "Thu" || ele === "Sat" ? (
-                        <div className='visibility-hidden opacity-0'>.</div>
+                        <div className='visiblity-hidden opacity-0'>Day</div>
                       ) : (
                         ele
                       )}
@@ -188,11 +188,11 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
               </div>
 
             {weeks.map((week, weekIdx) => (
-              <div key={weekIdx} className="flex flex-col gap-1">
+              <div key={weekIdx} className="flex flex-col">
                 {week.map((day, dayIdx) => (
                   <div
                     key={`${weekIdx}-${dayIdx}`}
-                    className="w-3 h-3 rounded-[3px] m-0.5 border-1 border-[#ffffff0c]  cursor-pointer transition-colors duration-200"
+                    className="md:w-3 md:h-3 h-2.5 w-2.5 rounded-[3px] m-0.5 border-1 border-[#ffffff09]  cursor-pointer transition-colors duration-200"
                     style={{ backgroundColor: getCellColor(day.intensity) }}
                     onMouseEnter={(e) => handleMouseEnter(e, day.date, day.intensity)}
                     onMouseMove={handleMouseMove}

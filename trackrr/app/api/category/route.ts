@@ -33,31 +33,9 @@ export async function POST(request: NextRequest) {
   } 
 
 
-//Update category by id (api)
-// export async function PUT(request: NextRequest) {
-//   try{
-//     const body = await request.json();
-  
-//     const { c_id, ...updates } = body;
-
-//     if(!c_id) {
-//       return NextResponse.json({ error: "c_id is required"});
-//     }
-
-//     const data = await updateCategory(c_id, updates);
-
-//     return NextResponse.json(data, { status: 200 });
-//   }
-//   catch (error: any) {
-//     return NextResponse.json({ error: error.message }, { status: 500 });
-//   }
-// }
-
-
-//Patch Code
 export async function PATCH(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url); // ?c_id = ...
+    const { searchParams } = new URL(request.url); 
 
     const c_id = searchParams.get("c_id");
     const u_id = searchParams.get("u_id");
