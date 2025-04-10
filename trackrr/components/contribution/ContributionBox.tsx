@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -22,10 +22,23 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
   const [cellData, setCellData] = useState<CellFillData[]>([]);
   const [loading, setLoading] = useState(true);
   const [hoveredCell, setHoveredCell] = useState<{ date: string, count: number, x: number, y: number } | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     getCellData();
   }, [categoryId, userId]);
+
+  // Effect to scroll to the latest week after data is loaded and component is rendered
+  useEffect(() => {
+    if (!loading && scrollContainerRef.current) {
+      // Scroll to the end (latest week) after a small delay to ensure rendering is complete
+      setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+        }
+      }, 100);
+    }
+  }, [loading]);
 
   const getCellData = async () => {
     try {
@@ -80,7 +93,8 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
         date: dateStr,
         dayOfWeek: currentDate.getDay(),
         intensity: matchingData ? matchingData.intensity : 0,
-        data: matchingData || null
+        data: matchingData || null,
+        isToday: dateStr === todayStr // Mark if this is today's cell
       });
     }
     
@@ -91,7 +105,13 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
 
   // Group cells by week
   const weeks = [];
-  let currentWeek: { date: string; dayOfWeek: number; intensity: number; data: CellFillData | null; }[] = [];
+  let currentWeek: { 
+    date: string; 
+    dayOfWeek: number; 
+    intensity: number; 
+    data: CellFillData | null; 
+    isToday?: boolean;
+  }[] = [];
   
   cells.forEach(cell => {
     if (cell.dayOfWeek === 0 && currentWeek.length > 0) {
@@ -105,6 +125,11 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
   if (currentWeek.length > 0) {
     weeks.push(currentWeek);
   }
+
+  // Check if a week contains today's date
+  const isCurrentWeek = (week: typeof currentWeek) => {
+    return week.some(day => day.isToday);
+  };
 
   // Function to determine cell color based on intensity
   const getCellColor = (intensity: number) => {
@@ -172,28 +197,38 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
       ) : (
         <>
           {/* Contribution grid */}
-          <div className="flex overflow-x-auto justify-center p-2">
-                        <div className='flex flex-col text-sm pr-2 text-gray-600'>
-                {weekDays.map((ele, index) => {
-                  return (
-                    <span key={index} className='h-4'>
-                      {ele === "Sun" || ele === "Tue" || ele === "Thu" || ele === "Sat" ? (
-                        <div className='visiblity-hidden opacity-0'>Day</div>
-                      ) : (
-                        ele
-                      )}
-                    </span>
-                  );
-                })}
-              </div>
+          <div 
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto justify-center p-2 scroll-smooth" 
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            <div className='flex flex-col text-sm pr-2 text-gray-600'>
+              {weekDays.map((ele, index) => {
+                return (
+                  <span key={index} className='h-4'>
+                    {ele === "Sun" || ele === "Tue" || ele === "Thu" || ele === "Sat" ? (
+                      <div className='visiblity-hidden opacity-0'>Day</div>
+                    ) : (
+                      ele
+                    )}
+                  </span>
+                );
+              })}
+            </div>
 
             {weeks.map((week, weekIdx) => (
               <div key={weekIdx} className="flex flex-col">
                 {week.map((day, dayIdx) => (
                   <div
                     key={`${weekIdx}-${dayIdx}`}
-                    className="md:w-3 md:h-3 h-2.5 w-2.5 rounded-[3px] m-0.5 border-1 border-[#ffffff09]  cursor-pointer transition-colors duration-200"
-                    style={{ backgroundColor: getCellColor(day.intensity) }}
+                    className={`md:w-3 md:h-3 h-2.5 w-2.5 rounded-[3px] m-0.5 border-1 border-[#ffffff09] cursor-pointer transition-colors duration-200 ${
+                      day.isToday ? 'ring-2 ring-offset-1 ring-white/20' : ''
+                    }`}
+                    style={{ 
+                      backgroundColor: getCellColor(day.intensity),
+                      // Alternative to ring if you want a glow effect
+                      boxShadow: day.isToday ? `0 0 4px ${color}` : 'none'
+                    }}
                     onMouseEnter={(e) => handleMouseEnter(e, day.date, day.intensity)}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
@@ -214,8 +249,6 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
               <div>{hoveredCell.count} contribution{hoveredCell.count !== 1 ? 's' : ''}</div>
             </div>
           )}
-          
-        
         </>
       )}
     </div>
@@ -243,7 +276,5 @@ function hexToRgba(hex: string, alpha: number) {
 
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
-
-
 
 export default ContributionBox;
