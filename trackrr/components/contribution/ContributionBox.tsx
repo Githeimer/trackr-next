@@ -199,7 +199,7 @@ const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId
           {/* Contribution grid */}
           <div 
             ref={scrollContainerRef}
-            className="flex overflow-x-auto justify-center p-2 scroll-smooth" 
+            className="flex overflow-x-auto md:justify-center p-2 scroll-smooth" 
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             <div className='flex flex-col text-sm pr-2 text-gray-600'>
