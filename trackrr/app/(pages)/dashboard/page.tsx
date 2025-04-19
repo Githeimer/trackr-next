@@ -1,11 +1,9 @@
 "use client"
 import AddCategoryDialog from '@/components/TrackerAdd'
-import { Button } from '@/components/ui/button'
 import { AuthState, useAuthStore } from '@/store/store'
 import { useSession } from 'next-auth/react'
 import React, { useEffect,useState } from 'react'
 import axios from 'axios'
-import { Category } from '../todo/page'
 import Contribution from '@/components/contribution/Contribution'
 
 const Dashboard = () => {

@@ -12,6 +12,7 @@ import { Code, BookOpen, Music, Heart, Zap, CheckCircle, Leaf, BarChart } from '
 import { useAuthStore } from '@/store/store';
 import { CategoryCreateData } from '@/helpers/db/category';
 import { useSession } from 'next-auth/react';
+import { Switch } from './ui/switch';
 
 export const categories = [
     { name: "Coding", icon: Code },
@@ -42,6 +43,7 @@ const AddCategoryDialog = () => {
     const [categoryType, setCategoryType] = useState<string>();
     const [description, setDescription] = useState<string>("");
     const [selectedIcon, setSelectedIcon] = useState<string | undefined>(undefined);
+    const [isWeeklyBased, setIsWeeklyBased] = useState<boolean>(false);
     const colorRef = useRef<HTMLInputElement>(null);
 
     const [open, setopen] = useState(false);
@@ -67,6 +69,7 @@ const AddCategoryDialog = () => {
                 category_type: categoryType,
                 description: description,
                 color: colorRef.current?.value || "#11ae70", // Default color if none selected
+                isWeeklyBased: isWeeklyBased || false
             };
 
 
@@ -93,13 +96,30 @@ const AddCategoryDialog = () => {
                 <Button className="bg-green-500 hover:bg-green-600 cursor-pointer" >+ Add Category</Button>
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl max-h-[90vh] md:max-h-[100vh] overflow-y-auto  
-    bg-black/70 md:bg-black/30 sm:bg-black border border-white/10 rounded-xl shadow-xl text-white">
+    bg-black/70 md:bg-black/80 sm:bg-black border border-white/10 rounded-xl shadow-xl text-white">
 
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold">Add Category</DialogTitle>
+                   <div className='flex-col gap-1 flex'>
+                   <DialogTitle className="text-xl font-bold">Add Category</DialogTitle>
+                   <p className='text-gray-400 text-xs'>User will provide task for each day and completion will be reflected on contribution box</p>
+                   </div>
                 </DialogHeader>
 
+
                 <div className="grid gap-4 py-4">
+                <div className="flex items-center gap-4 mb-4 flex-row">
+
+                       <Switch 
+                           className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-green-500 "
+                          checked={isWeeklyBased}
+                          onCheckedChange={(checked) => setIsWeeklyBased(checked)}
+                       /> 
+                       <Label htmlFor="weekly-based" className="text-sm font-medium text-gray-200">
+                                {isWeeklyBased? "Weekly Based" : "Daily Based"}
+                        </Label>  
+                        <span className='text-xs text-gray-400 font-medium'>{isWeeklyBased?"You will set the repetitve taks for the week":"You will set daily tasks"} </span>
+                           
+                    </div>
                     <div className="grid gap-2">
                         <Label>Habit Name</Label>
                         <Input
@@ -185,7 +205,7 @@ const AddCategoryDialog = () => {
                     Cancel
                 
                     </DialogTrigger>
-                    <Button onClick={handleAddCategory} className="bg-green-500 hover:opacity-90">
+                    <Button onClick={handleAddCategory} className="bg-green-500  hover:bg-green-600">
                         Add Category
                     </Button>
                 </DialogFooter>

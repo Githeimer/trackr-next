@@ -5,13 +5,18 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import TaskList from "./TaskList";
 import TaskAddButton from "./TaskAddButton";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, microtask, motion } from "framer-motion";
+import AddWeeklyTask from "./WeeklyTask";
 
 const TodoCategory = ({ category }: { category: Category }) => {
   const { data: session } = useSession();
   const [tasks, setTasks] = useState<any[]>([]);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
+
+  const today = new Date();
+  const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  console.log(formattedDate);
    
   useEffect(() => {
     if (category?.c_id) {
@@ -21,10 +26,6 @@ const TodoCategory = ({ category }: { category: Category }) => {
 
   const fetchTaskData = async () => {
     try {
-      const today = new Date();
-      const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-      console.log(formattedDate);
-      
       const response = await axios.get(`/api/task?cid=${category.c_id}&date=${formattedDate}`);
 
       if (response.data.tasks) {
@@ -45,7 +46,8 @@ const TodoCategory = ({ category }: { category: Category }) => {
         await axios.post("/api/task", {
           task_description: newTaskText,
           c_id: category.c_id,
-          u_id: category.u_id
+          u_id: category.u_id,
+          today: formattedDate
         });
         setNewTaskText("");
         setIsAddingNew(false);
@@ -72,8 +74,13 @@ const TodoCategory = ({ category }: { category: Category }) => {
     >
       {/* List Title */}
       <div className="flex-col flex w-full mb-3">
-        <div className="flex items-center">
+        <div className="flex flex-row justify-between items-center">
           <h1 className="text-xl font-semibold text-white">{category.category_name}</h1>
+          <div className="flex-row flex  items-center">
+            <span className="text-xs text-gray-400 font-semibold">{category.isWeeklyBased ? "Weekly Based" : ""}</span>
+            {category.isWeeklyBased && <AddWeeklyTask categoryId={Number(category.c_id)}/>}
+            
+          </div>
         </div>
         <hr style={{ borderColor: category.color }} className="w-full mt-2 border-2 rounded opacity-70" />
       </div>

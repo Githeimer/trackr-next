@@ -135,7 +135,7 @@ const TaskList = ({ task, fetchTaskData, categoryId }: { task: any; fetchTaskDat
               <TrashIcon className="text-red-500 cursor-pointer w-5 h-5" />
             </motion.button>
           </div>
-        </>
+                </>
       )}
     </motion.div>
   );

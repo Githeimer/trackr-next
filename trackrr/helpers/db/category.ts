@@ -9,6 +9,7 @@ export interface Category {
     color: string;
     description?: string;
     created_at?: string;
+    isWeeklyBased?: boolean;
   }
 
   export interface CategoryCreateData {
@@ -19,6 +20,7 @@ export interface Category {
     icon_name?: string |null;
     color?: string;
     description?: string;
+    isWeeklyBased?: boolean
     // Add any other fields need for category creation
   }
 

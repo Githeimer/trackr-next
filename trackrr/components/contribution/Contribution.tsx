@@ -52,7 +52,7 @@ const Contribution = ({category, onUpdate}: {category: Category, onUpdate?: () =
         <div className='rounded-full w-2.5 h-2.5 mt-4' style={{backgroundColor: category.color}}></div>
           <div className='flex flex-col'>
             <span className='md:text-2xl text-lg'>{category.category_name}</span>
-          <span className='md:text-sm text-sm text-gray-500'>{category.description}</span>
+           <span className='md:text-sm text-sm text-gray-500'>{category.description}</span>
           </div>
           
          
@@ -60,8 +60,8 @@ const Contribution = ({category, onUpdate}: {category: Category, onUpdate?: () =
         
         {/* Category controls dropdown */}
         <div className="relative flex items-center">
+       <span className='text-xs text-gray-400 font-semibold'> {category.isWeeklyBased?"Weekly Based":""}</span>
           <EditCategoryDialog category={category} onEditComplete={onUpdate} />
-          
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white ml-1">

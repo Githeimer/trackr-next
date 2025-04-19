@@ -5,23 +5,14 @@ import axios from 'axios'
 import TodoCategory from '@/components/TodoCategory'
 import { Clock } from 'lucide-react'
 
-export interface Category{
-  c_id: string
-  category_name: string
-  category_type: string
-  color: string
-  created_at: string
-  description: string
-  icon_name: string
-  u_id: string
-}
+import { Category } from '@/helpers/db/category'
 
 const Todo = () => {
   const { data: session, status } = useSession();
   const [categoryData, setCategoryData] = useState([]);
 
   const today = new Date();
-      const normalizedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const normalizedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   useEffect(() => {
     if (status === "authenticated" && session?.user?.id) {
       getCategory();

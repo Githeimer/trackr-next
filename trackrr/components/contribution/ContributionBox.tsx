@@ -14,10 +14,11 @@ const weekDays=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 const ContributionBox = ({ categoryId, userId, color = '#39d353' }: { categoryId: number, userId: number, color: string }) => {
   const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
-  const oneYearAgo = new Date(today);
-  oneYearAgo.setFullYear(today.getFullYear() - 1);
-  const oneYearAgoStr = oneYearAgo.toISOString().split('T')[0];
+const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+const oneYearAgo = new Date(today);
+oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+const oneYearAgoStr = `${oneYearAgo.getFullYear()}-${String(oneYearAgo.getMonth() + 1).padStart(2, '0')}-${String(oneYearAgo.getDate()).padStart(2, '0')}`;
+
   
   const [cellData, setCellData] = useState<CellFillData[]>([]);
   const [loading, setLoading] = useState(true);
